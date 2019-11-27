@@ -1,20 +1,42 @@
 package com.briup.cms.bean;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 @Entity
 @Table(name = "cms_article")
+@ApiModel
 public class Article implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @ApiModelProperty(value = "信息Id")
     private int id;
+    @ApiModelProperty(value = "信息作者",required = true)
     private String author;
+    @ApiModelProperty(value = "信息点击次数",hidden = true)
     private int clickTimes;
-    private String context;
+    @ApiModelProperty(value = "信息内容",required = true)
+    private String content;
+    @ApiModelProperty(value = "信息发布时间",hidden = true)
     private Date publishDate;
+    @ApiModelProperty(value = "信息标题",required = true)
     private String title;
+
+    @ManyToOne
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     public int getId() {
         return id;
@@ -40,12 +62,12 @@ public class Article implements Serializable {
         this.clickTimes = clickTimes;
     }
 
-    public String getContext() {
-        return context;
+    public String getContent() {
+        return content;
     }
 
-    public void setContext(String context) {
-        this.context = context;
+    public void setContent(String context) {
+        this.content = context;
     }
 
     public Date getPublishDate() {
@@ -70,9 +92,10 @@ public class Article implements Serializable {
                 "id=" + id +
                 ", author='" + author + '\'' +
                 ", clickTimes=" + clickTimes +
-                ", context='" + context + '\'' +
+                ", context='" + content + '\'' +
                 ", publishDate=" + publishDate +
                 ", title='" + title + '\'' +
+                ", category=" + category +
                 '}';
     }
 }
